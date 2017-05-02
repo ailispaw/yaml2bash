@@ -1,0 +1,4 @@
+.vagrant/
+
+lib/*.o
+lib/yaml2bash

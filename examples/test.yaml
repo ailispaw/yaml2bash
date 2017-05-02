@@ -1,0 +1,38 @@
+#cloud-config
+
+hostname: "localhost"
+
+users:
+  - name: foo
+    gecos: Foo
+    system: true
+  - name: bar
+  - name: test2
+    tests:
+      array:
+        - array 1
+        - [ "array in array 1", "array in array 2" ]
+        -
+          - array in array 3
+          - array in array 4
+        - array 2
+      flow: [ "flow 1", "flow 2", [ "flow 3 in flow", "flow 4 in flow" ], { "map": "map in flow" } ]
+      literal: |
+        echo "test"
+        printf "test2\n"
+      folded: >
+        test
+        test
+      mapping: {
+        name: "aaa",
+        array: [ "bbb", "ccc" ]
+      }
+      json:
+        literal: |
+          {
+          "name": "value"
+          }
+        folded: >
+          {
+          "name": "value"
+          }
