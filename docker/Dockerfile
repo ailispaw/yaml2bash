@@ -1,8 +1,8 @@
-FROM ailispaw/ubuntu-essential:14.04-nodoc
+FROM alpine:3.4
 
 WORKDIR /src
 VOLUME /src
 
-RUN apt-get -q update && \
-    apt-get -q -y install --no-install-recommends build-essential make libyaml-dev && \
-    apt-get clean && rm -rf /var/lib/apt/lists/*
+RUN apk --no-cache --update add build-base yaml-dev bash
+
+CMD [ "bash" ]
