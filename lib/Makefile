@@ -4,7 +4,7 @@ SRCS := yaml2bash.c
 OBJS := $(SRCS:%.c=%.o)
 
 CFLAGS := -std=gnu99 -Wall -Werror -O3
-LDFLAGS := -s
+LDFLAGS := -s -static
 LDLIBS := -lyaml
 
 $(PROGRAM): $(OBJS)
