@@ -195,7 +195,7 @@ static int yaml2bash_parse(yaml_parser_t *parser, char *prefix, int state) {
       case YAML_ALIAS_EVENT:
         break;
       case YAML_SCALAR_EVENT:
-        if (state & STATE_VAL) {
+        if ((state == 0) || (state & STATE_VAL)) {
           yaml2bash_value((char *)event.data.scalar.value, &value);
           printf("%s=\"%s\";\n", key, value);
           state ^= STATE_VAL;
