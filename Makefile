@@ -18,7 +18,7 @@ ssh: | image
 clean:
 	docker run --rm -v $(WORK_DIR):/work $(PROGRAM):work make -C src clean
 
-.PHONY: build test ssh image clean
+.PHONY: image ssh clean
 
 release: $(ARCHIVE)
 
