@@ -36,10 +36,11 @@ distclean:
 
 docker:
 	docker build -t $(PROGRAM):latest --build-arg BRANCH=$(VERSION) .
-	docker tag $(PROGRAM):latest $(PROGRAM):$(VERSION)
 
 push: docker
-	docker push $(PROGRAM):$(VERSION)
-	docker push $(PROGRAM):latest
+	docker tag $(PROGRAM):latest ailispaw/$(PROGRAM):$(VERSION)
+	docker tag $(PROGRAM):latest ailispaw/$(PROGRAM):latest
+	docker push ailispaw/$(PROGRAM):$(VERSION)
+	docker push ailispaw/$(PROGRAM):latest
 
 .PHONY: docker push
