@@ -1,5 +1,8 @@
 #include <stdio.h>
+#include <unistd.h>
 #include <yaml.h>
+
+#include "version.h"
 
 #ifdef DEBUG
   #define DEBUG_PRINT(...) do { fprintf(stderr, __VA_ARGS__); } while (0)
@@ -59,6 +62,8 @@ static void print_event(yaml_event_t *event) {
 #define STATE_VAL 1<<2
 
 #define SEPARATOR '_'
+
+static int flag_multiple_douments = 0;
 
 static void yaml2bash_key(char *src, char **result) {
   int i, j;
@@ -149,6 +154,15 @@ static int yaml2bash_parse(yaml_parser_t *parser, char *prefix, int state) {
         finished = 1;
         break;
       case YAML_DOCUMENT_START_EVENT:
+        if (flag_multiple_douments) {
+          sprintf(key, "%s%c%d", prefix, SEPARATOR, sequence);
+          printf("declare -A %s; %s[KEYS]+=\" %d\";\n", prefix, prefix, sequence);
+          sequence++;
+          if (!yaml2bash_parse(parser, key, 0)) {
+            yaml_event_delete(&event);
+            return 0;
+          }
+        }
         break;
       case YAML_DOCUMENT_END_EVENT:
         finished = 1;
@@ -224,29 +238,58 @@ static int yaml2bash_parse(yaml_parser_t *parser, char *prefix, int state) {
   return finished;
 }
 
+static void print_help(char **argv) {
+  fprintf(stderr,
+    "yaml2bash v%s\n"
+    "\n"
+    "Usage: %s [-m] [-p <prefix>] [<filename>] [-v] [-h]\n"
+    "\n"
+    "Options:\n"
+    "    -m          : handle as a file contains mutiple documents\n"
+    "    -p <prefix> : specify a prefix for variables, or \"YAML\" by default\n"
+    "    <filename>  : specify a YAML file to parse, or it will wait for stdin\n"
+    "    -v          : show the current version and exit\n"
+    "    -h          : show this help message and exit\n"
+    ,
+    VERSION, argv[0]);
+}
+
 int main(int argc, char **argv) {
   FILE *fh = NULL;
   char prefix[1024];
   yaml_parser_t parser;
 
-  if (argc > 1) {
-    if (argv[1][0] == '-') {
-      fh = stdin;
-    } else {
-      fh = fopen(argv[1], "r");
-      if (fh == NULL) {
-        fprintf(stderr, "Failed to open file: %s\n", argv[1]);
+  sprintf(prefix, "YAML");
+
+  int opt;
+  while ((opt = getopt(argc, argv, "vhmp:")) != -1) {
+    switch (opt) {
+      case 'v':
+        fprintf(stderr, "yaml2bash v%s\n", VERSION);
+        return 0;
+      case 'h':
+        print_help(argv);
+        return 0;
+      case 'm':
+        flag_multiple_douments = 1;
+        break;
+      case 'p':
+        sprintf(prefix, "%s", optarg);
+        break;
+      default:
+        print_help(argv);
         return 1;
-      }
+    }
+  }
+
+  if (argc > optind) {
+    fh = fopen(argv[optind], "r");
+    if (fh == NULL) {
+      fprintf(stderr, "Failed to open file: %s\n", argv[optind]);
+      return 1;
     }
   } else {
-    fprintf(stderr, "Usage: %s (<filename>|-) [<prefix>]\n", argv[0]);
-    return 1;
-  }
-  if (argc > 2) {
-    sprintf(prefix, "%s", argv[2]);
-  } else {
-    sprintf(prefix, "YAML");
+    fh = stdin;
   }
 
   yaml_parser_initialize(&parser);

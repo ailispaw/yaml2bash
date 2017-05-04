@@ -10,6 +10,8 @@ LDLIBS := -lyaml
 $(PROGRAM): $(OBJS)
 	$(CC) $(CFLAGS) $(LDFLAGS) $^ $(LDLIBS) -o $@
 
+$(OBJS): $(SRC) version.h
+
 clean:
 	$(RM) $(PROGRAM) $(OBJS)
 
