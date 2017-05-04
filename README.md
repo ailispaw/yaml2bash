@@ -65,3 +65,10 @@ count YAML
 count YAML_0
 count YAML_0_users
 ```
+
+## License
+
+Copyright (c) 2017 A.I. &lt;ailis@paw.zone&gt;
+
+Licensed under the GNU General Public License, version 2 (GPL-2.0)  
+http://opensource.org/licenses/GPL-2.0
