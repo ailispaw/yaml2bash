@@ -1,11 +1,11 @@
 #!/usr/bin/env bash
 set -e
 
-./src/yaml2bash ./examples/test.yaml
+../src/yaml2bash test.yaml
 
-source ./lib/yaml2bash.bash
+source ../lib/yaml2bash.bash
 
-eval $(./src/yaml2bash ./examples/test.yaml)
+eval $(../src/yaml2bash test.yaml)
 declare -p YAML >/dev/null
 
 echo "--------------------------------------------------------------------------------"
