@@ -2,13 +2,6 @@
 
 Converts YAML to Bash variables
 
-## Build
-
-```bash
-$ vagrant up
-$ docker run --rm -v /vagrant/lib:/src yaml2bash make
-```
-
 ## Usage
 
 ### yaml2bash binary
@@ -27,17 +20,19 @@ Options:
 At a console;
 
 ```bash
-$ ./lib/yaml2bash ./examples/test.yaml
-$ cat ./examples/test.yaml | ./lib/yaml2bash
-$ ./lib/yaml2bash -p PREFIX < ./examples/test.yaml
+$ yaml2bash ./examples/test.yaml
+$ cat ./examples/test.yaml | yaml2bash
+$ yaml2bash -p PREFIX < ./examples/test.yaml
 ```
 
 In a script;
 
 ```bash
 #!/usr/bin/env bash
+set -e
 
-eval $(./lib/yaml2bash ./examples/test.yaml)
+eval $(yaml2bash ./examples/test.yaml)
+declare -p YAML >/dev/null
 
 # To refer an individual variable
 echo $YAML_hostname
@@ -50,15 +45,15 @@ In a script;
 
 ```bash
 #!/usr/bin/env bash
+set -e
 
 source ./lib/yaml2bash.bash
 
-eval $(./lib/yaml2bash -m ./examples/test.yaml)
+eval $(yaml2bash -m ./examples/test.yaml)
+declare -p YAML >/dev/null
 
 # To traverse YAML structure
 traverse YAML
-traverse YAML_0
-traverse YAML_0_users
 
 # To count chidren of an individual variable
 count YAML

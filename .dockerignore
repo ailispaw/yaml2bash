@@ -1,0 +1,4 @@
+*
+!src/*
+src/yaml2bash
+src/*.o

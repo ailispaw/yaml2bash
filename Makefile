@@ -1,16 +1,35 @@
-up:
-	vagrant up
+PROGRAM := yaml2bash
+VERSION := $(shell sed -ne "s/^\#define VERSION \"\(.*\)\"/\1/p" src/version.h)
+ARCHIVE := $(PROGRAM)-$(VERSION)-Linux-x86_64.tar.gz
 
-build:
-	docker run --rm -v /vagrant/lib:/src yaml2bash make
+UNAME_S := $(shell uname -s)
+ifeq ($(UNAME_S),Linux)
+	WORK_DIR := $(CURDIR)
+else
+	WORK_DIR := "/vagrant"
+endif
 
-test:
-	docker run --rm -v /vagrant:/src yaml2bash ./test.sh
+image:
+	docker build -t $(PROGRAM):work .
 
-ssh:
-	docker run -it --rm -v /vagrant:/src yaml2bash
+ssh: | image
+	docker run -it --rm -v $(WORK_DIR):/work $(PROGRAM):work
 
 clean:
-	docker run --rm -v /vagrant/lib:/src yaml2bash make clean
+	docker run --rm -v $(WORK_DIR):/work $(PROGRAM):work make -C src clean
 
-.PHONY: up build test ssh clean
+.PHONY: build test ssh image clean
+
+release: $(ARCHIVE)
+
+$(ARCHIVE):
+	docker build -t $(PROGRAM):static -f Dockerfile.static .
+	docker create --name $(PROGRAM) $(PROGRAM):static
+	docker cp $(PROGRAM):/work/$(PROGRAM) $(PROGRAM)
+	docker rm $(PROGRAM)
+	tar zcvf $(ARCHIVE) $(PROGRAM) lib/$(PROGRAM).bash
+
+distclean:
+	$(RM) $(PROGRAM) $(ARCHIVE)
+
+.PHONY: release distclean

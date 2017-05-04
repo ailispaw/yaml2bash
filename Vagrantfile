@@ -9,13 +9,9 @@ module VagrantPlugins
 end
 
 Vagrant.configure(2) do |config|
-  config.vm.define "yaml2bash"
+  config.vm.define "yaml2bash-barge"
 
   config.vm.box = "ailispaw/barge"
 
   config.vm.synced_folder ".", "/vagrant"
-
-  config.vm.provision :docker do |docker|
-    docker.build_image "/vagrant/docker", args: "-t yaml2bash"
-  end
 end

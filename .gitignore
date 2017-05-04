@@ -1,4 +1,5 @@
 .vagrant/
 
-lib/*.o
-lib/yaml2bash
+yaml2bash
+*.o
+*.tar.gz

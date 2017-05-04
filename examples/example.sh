@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+set -e
 
 FILE=$1
 
@@ -7,11 +8,12 @@ if [ -z "${FILE}" ]; then
   exit 1
 fi
 
-../lib/yaml2bash "${FILE}"
+../src/yaml2bash "${FILE}"
 
 source ../lib/yaml2bash.bash
 
-eval $(../lib/yaml2bash "${FILE}")
+eval $(../src/yaml2bash "${FILE}")
+declare -p YAML >/dev/null
 
 echo "--------------------------------------------------------------------------------"
 echo "Traversing"
