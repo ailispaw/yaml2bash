@@ -39,7 +39,7 @@ In a script;
 
 eval $(./lib/yaml2bash ./examples/test.yaml)
 
-# To refarence an individual variable
+# To refer an individual variable
 echo $YAML_hostname
 echo $YAML_users_1_name
 ```
