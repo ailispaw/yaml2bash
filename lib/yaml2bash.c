@@ -106,7 +106,6 @@ static int yaml2bash_parse(yaml_parser_t *parser, char *prefix, int state) {
 
   int finished = 0;
   int sequence = 0;
-  int flow_seq = 0;
 
   char key[1024];
   char *value;
@@ -169,11 +168,7 @@ static int yaml2bash_parse(yaml_parser_t *parser, char *prefix, int state) {
         }
         break;
       case YAML_SEQUENCE_END_EVENT:
-        if (flow_seq > 0) {
-          flow_seq--;
-        } else {
-          finished = 1;
-        }
+        finished = 1;
         break;
       case YAML_MAPPING_START_EVENT:
         if (state & STATE_MAP) {
