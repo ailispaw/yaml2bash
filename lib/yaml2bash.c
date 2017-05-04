@@ -193,6 +193,13 @@ static int yaml2bash_parse(yaml_parser_t *parser, char *prefix, int state) {
         finished = 1;
         break;
       case YAML_ALIAS_EVENT:
+        if (state & STATE_MAP) {
+          state ^= STATE_VAL;
+        }
+        if (state & STATE_SEQ) {
+          printf("declare -A %s; %s[KEYS]+=\" %d\";\n", prefix, prefix, sequence);
+          sequence++;
+        }
         break;
       case YAML_SCALAR_EVENT:
         if ((state == 0) || (state & STATE_VAL)) {
