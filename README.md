@@ -61,6 +61,16 @@ count YAML_0
 count YAML_0_users
 ```
 
+## Docker
+
+You can use Docker to execute yaml2bash as well.
+
+```bash
+$ docker run -i --rm ailispaw/yaml2bash < ./examples/test.yaml
+```
+
+https://hub.docker.com/r/ailispaw/yaml2bash
+
 ## License
 
 Copyright (c) 2017 A.I. &lt;ailis@paw.zone&gt;
