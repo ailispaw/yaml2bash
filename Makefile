@@ -10,7 +10,7 @@ else
 endif
 
 image:
-	docker build -t $(PROGRAM):work .
+	docker build -t $(PROGRAM):work -f Dockerfile.work .
 
 ssh: | image
 	docker run -it --rm -v $(WORK_DIR):/work $(PROGRAM):work
@@ -33,3 +33,13 @@ distclean:
 	$(RM) $(PROGRAM) $(ARCHIVE)
 
 .PHONY: release distclean
+
+docker:
+	docker build -t $(PROGRAM):latest --build-arg BRANCH=$(VERSION) .
+	docker tag $(PROGRAM):latest $(PROGRAM):$(VERSION)
+
+push: docker
+	docker push $(PROGRAM):$(VERSION)
+	docker push $(PROGRAM):latest
+
+.PHONY: docker push

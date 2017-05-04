@@ -1,9 +1,11 @@
-FROM ailispaw/ubuntu-essential:14.04-nodoc
+FROM alpine:3.4
 
-RUN apt-get -q update && \
-    apt-get -q -y install --no-install-recommends build-essential make libyaml-dev && \
-    apt-get clean && rm -rf /var/lib/apt/lists/*
+ARG BRANCH="master"
 
-VOLUME /work
+RUN apk --no-cache --update add --virtual build-deps build-base yaml-dev git && \
+    git clone --depth 1 --branch ${BRANCH} https://github.com/ailispaw/yaml2bash /work && \
+    STATIC=1 make -C /work/src install && \
+    apk del build-deps && \
+    rm -rf /work
 
-WORKDIR /work
+ENTRYPOINT [ "yaml2bash" ]
