@@ -17,7 +17,7 @@ $ docker run --rm -v /vagrant/lib:/src yaml2bash make
 Usage: yaml2bash [-m] [-p <prefix>] [<filename>] [-v] [-h]
 
 Options:
-    -m          : handle as a file contains mutiple docuemtns
+    -m          : handle as a file contains mutiple documents
     -p <prefix> : specify a prefix for variables, or "YAML" by default
     <filename>  : specify a YAML file to parse, or it will wait for stdin
     -v          : show the current version and exit
