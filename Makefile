@@ -22,20 +22,24 @@ clean:
 
 release: $(ARCHIVE)
 
-$(ARCHIVE):
+$(ARCHIVE): $(PROGRAM) lib/$(PROGRAM).bash
+	tar zcvf $(ARCHIVE) $(PROGRAM) lib/$(PROGRAM).bash
+
+$(PROGRAM):
 	docker build -t $(PROGRAM):static -f Dockerfile.static .
 	docker create --name $(PROGRAM) $(PROGRAM):static
 	docker cp $(PROGRAM):/work/$(PROGRAM) $(PROGRAM)
 	docker rm $(PROGRAM)
-	tar zcvf $(ARCHIVE) $(PROGRAM) lib/$(PROGRAM).bash
 
 distclean:
 	$(RM) $(PROGRAM) $(ARCHIVE)
 
 .PHONY: release distclean
 
-docker:
-	docker build -t $(PROGRAM):latest --build-arg BRANCH=$(VERSION) .
+docker: $(PROGRAM)
+	cp $(PROGRAM) ./docker/$(PROGRAM)
+	docker build -t $(PROGRAM):latest docker
+	$(RM) ./docker/$(PROGRAM)
 
 push: docker
 	docker tag $(PROGRAM):latest ailispaw/$(PROGRAM):$(VERSION)
