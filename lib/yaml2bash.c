@@ -29,16 +29,16 @@ static void print_event(yaml_event_t *event) {
       DEBUG_PRINT("\n");
       break;
     case YAML_DOCUMENT_END_EVENT:
-      DEBUG_PRINT("End Document</b>\n");
+      DEBUG_PRINT("End Document\n");
       break;
     case YAML_SEQUENCE_START_EVENT:
-      DEBUG_PRINT("Start Sequence\n");
+      DEBUG_PRINT("Start Sequence: Style: %d\n", event->data.sequence_start.style);
       break;
     case YAML_SEQUENCE_END_EVENT:
       DEBUG_PRINT("End Sequence\n");
       break;
     case YAML_MAPPING_START_EVENT:
-      DEBUG_PRINT("Start Mapping\n");
+      DEBUG_PRINT("Start Mapping Style: %d\n", event->data.mapping_start.style);
       break;
     case YAML_MAPPING_END_EVENT:
       DEBUG_PRINT("End Mapping\n");
@@ -47,7 +47,8 @@ static void print_event(yaml_event_t *event) {
       DEBUG_PRINT("Alias\n");
       break;
     case YAML_SCALAR_EVENT:
-      DEBUG_PRINT("Scalar: %s\n", event->data.scalar.value);
+      DEBUG_PRINT("Scalar: Style: %d, Value: %s\n",
+        event->data.scalar.style, event->data.scalar.value);
       break;
   }
 }
