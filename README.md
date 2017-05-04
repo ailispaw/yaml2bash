@@ -71,6 +71,11 @@ $ docker run -i --rm ailispaw/yaml2bash < ./examples/test.yaml
 
 https://hub.docker.com/r/ailispaw/yaml2bash
 
+## Caveats
+
+- The converted variables work only with Bash version 4.
+- It doesn't support YAML's Alias, Tag and Complex Mapping Key. (#1)
+
 ## License
 
 Copyright (c) 2017 A.I. &lt;ailis@paw.zone&gt;
