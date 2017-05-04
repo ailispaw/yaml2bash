@@ -86,10 +86,8 @@ static void yaml2bash_value(char *src, char **result) {
   char *buf = (char *)malloc(sizeof(char) * strlen(src) * 4 + 1);
   for (i = 0, j = 0; i < strlen(src); i++) {
     if (src[i] == '\n') {
-      if (i != (strlen(src) -1)) {
-        buf[j++] = '\\';
-        buf[j++] = 'n';
-      }
+      buf[j++] = '\\';
+      buf[j++] = 'n';
     } else if (src[i] == '"') {
       buf[j++] = '\\';
       buf[j++] = '"';
