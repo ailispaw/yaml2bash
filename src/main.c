@@ -120,6 +120,8 @@ static void yaml2bash_value(char *src, char **result) {
     } else if (src[i] == '\\') {
       buf[j++] = '\\';
       buf[j++] = '\\';
+      buf[j++] = '\\';
+      buf[j++] = '\\';
     } else {
       buf[j++] = src[i];
     }
