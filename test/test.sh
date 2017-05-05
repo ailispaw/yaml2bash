@@ -57,3 +57,30 @@ echo "count(YAML[users][2][tests][literal])=$(count YAML[users][2][tests][litera
 echo "count(YAML[users][2][tests][folded])=$(count YAML[users][2][tests][folded])"
 echo "count(YAML[users][2][tests][mapping])=$(count YAML[users][2][tests][mapping])"
 echo "count(YAML[users][2][tests][json])=$(count YAML[users][2][tests][json])"
+
+echo "--------------------------------------------------------------------------------"
+echo "Getting Keys"
+echo "--------------------------------------------------------------------------------"
+
+echo "keys(YAML)=$(keys YAML)"
+echo "keys(YAML[users])=$(keys YAML[users])"
+echo "keys(YAML[users][0])=$(keys YAML[users][0])"
+
+echo "--------------------------------------------------------------------------------"
+echo "Getting a Single Value (same as Reference)"
+echo "--------------------------------------------------------------------------------"
+
+echo "YAML_users_0_name=${YAML_users_0_name}"
+echo "value(YAML[users][0][name])=$(value YAML[users][0][name])"
+echo "YAML_users_2_tests_literal=${YAML_users_2_tests_literal}"
+echo "value(YAML[users][2][tests][literal])=$(value YAML[users][2][tests][literal])"
+
+echo "--------------------------------------------------------------------------------"
+echo "Convert to Json"
+echo "--------------------------------------------------------------------------------"
+
+echo "json(YAML)=$(json YAML)"
+echo "json(YAML[users])=$(json YAML[users])"
+echo "json(YAML[users][0])=$(json YAML[users][0])"
+echo "json(YAML[users][0][name])=$(json YAML[users][0][name])"
+echo "json(YAML[users][2][tests][literal])=$(json YAML[users][2][tests][literal])"
