@@ -20,9 +20,9 @@ Options:
 At a console;
 
 ```bash
-$ yaml2bash ./examples/test.yaml
-$ cat ./examples/test.yaml | yaml2bash
-$ yaml2bash -p PREFIX < ./examples/test.yaml
+$ yaml2bash ./test/test.yaml
+$ cat ./test/test.yaml | yaml2bash
+$ yaml2bash -p PREFIX < ./test/test.yaml
 ```
 
 In a script;
@@ -31,7 +31,7 @@ In a script;
 #!/usr/bin/env bash
 set -e
 
-eval $(yaml2bash ./examples/test.yaml)
+eval $(yaml2bash ./test/test.yaml)
 declare -p YAML >/dev/null
 
 # To refer an individual variable
@@ -49,7 +49,7 @@ set -e
 
 source ./lib/yaml2bash.bash
 
-eval $(yaml2bash -m ./examples/test.yaml)
+eval $(yaml2bash -m ./test/test.yaml)
 declare -p YAML >/dev/null
 
 # To traverse YAML structure
@@ -66,7 +66,7 @@ count YAML_0_users
 You can use Docker to execute yaml2bash as well.
 
 ```bash
-$ docker run -i --rm ailispaw/yaml2bash < ./examples/test.yaml
+$ docker run -i --rm ailispaw/yaml2bash < ./test/test.yaml
 ```
 
 https://hub.docker.com/r/ailispaw/yaml2bash
