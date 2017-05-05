@@ -85,15 +85,39 @@ static void yaml2bash_value(char *src, char **result) {
   int i, j;
   char *buf = (char *)malloc(sizeof(char) * strlen(src) * 4 + 1);
   for (i = 0, j = 0; i < strlen(src); i++) {
-    if (src[i] == '\n') {
+    if (src[i] == '\a') {
+      buf[j++] = '\\';
+      buf[j++] = 'a';
+    } else if (src[i] == '\b') {
+      buf[j++] = '\\';
+      buf[j++] = 'b';
+    } else if (src[i] == '\t') {
+      buf[j++] = '\\';
+      buf[j++] = 't';
+    } else if (src[i] == '\n') {
       buf[j++] = '\\';
       buf[j++] = 'n';
+    } else if (src[i] == '\v') {
+      buf[j++] = '\\';
+      buf[j++] = 'v';
+    } else if (src[i] == '\f') {
+      buf[j++] = '\\';
+      buf[j++] = 'f';
+    } else if (src[i] == '\r') {
+      buf[j++] = '\\';
+      buf[j++] = 'r';
+    } else if (src[i] == '\e') {
+      buf[j++] = '\\';
+      buf[j++] = 'e';
+    } else if ((unsigned int)src[i] < 0x20) {
+      buf[j++] = '\\';
+      buf[j++] = 'x';
+      sprintf(&buf[j++], "%02x", src[i]);
+      j++;
     } else if (src[i] == '"') {
       buf[j++] = '\\';
       buf[j++] = '"';
     } else if (src[i] == '\\') {
-      buf[j++] = '\\';
-      buf[j++] = '\\';
       buf[j++] = '\\';
       buf[j++] = '\\';
     } else {
