@@ -116,12 +116,18 @@ static void yaml2bash_value(char *src, char **result) {
       j++;
     } else if (src[i] == '"') {
       buf[j++] = '\\';
-      buf[j++] = '"';
+      buf[j++] = src[i];
+    } else if (src[i] == '$') {
+      buf[j++] = '\\';
+      buf[j++] = src[i];
+    } else if (src[i] == '`') {
+      buf[j++] = '\\';
+      buf[j++] = src[i];
     } else if (src[i] == '\\') {
       buf[j++] = '\\';
       buf[j++] = '\\';
       buf[j++] = '\\';
-      buf[j++] = '\\';
+      buf[j++] = src[i];
     } else {
       buf[j++] = src[i];
     }
