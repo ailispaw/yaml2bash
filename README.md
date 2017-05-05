@@ -6,7 +6,7 @@ Converts YAML to Bash variables
 
 ### yaml2bash binary
 
-```bash
+```
 Usage: yaml2bash [-m] [-p <prefix>] [<filename>] [-v] [-h]
 
 Options:
