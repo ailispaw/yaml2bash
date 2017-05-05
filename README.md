@@ -10,7 +10,7 @@ Converts YAML to Bash variables
 Usage: yaml2bash [-m] [-p <prefix>] [<filename>] [-v] [-h]
 
 Options:
-    -m          : handle as a file contains mutiple documents
+    -m          : handle as a file contains multiple documents
     -p <prefix> : specify a prefix for variables, or "YAML" by default
     <filename>  : specify a YAML file to parse, or it will wait for stdin
     -v          : show the current version and exit

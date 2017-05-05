@@ -14,43 +14,43 @@
 static void print_event(yaml_event_t *event) {
   switch (event->type) {
     case YAML_NO_EVENT:
-      DEBUG_PRINT("No Event!\n");
+      DEBUG_PRINT("NO EVENT!\n");
       break;
     case YAML_STREAM_START_EVENT:
       DEBUG_PRINT("STREAM START: Encoding: %d\n", event->data.stream_start.encoding);
       break;
     case YAML_STREAM_END_EVENT:
-      DEBUG_PRINT("STREAM END\n");
+      DEBUG_PRINT("STREAM END:\n");
       break;
     case YAML_DOCUMENT_START_EVENT:
-      DEBUG_PRINT("Start Document");
+      DEBUG_PRINT("DOCUMENT START:");
       if (event->data.document_start.version_directive) {
-        DEBUG_PRINT(": Version: %d.%d",
+        DEBUG_PRINT("Version: %d.%d",
           event->data.document_start.version_directive->major,
           event->data.document_start.version_directive->minor);
       }
       DEBUG_PRINT("\n");
       break;
     case YAML_DOCUMENT_END_EVENT:
-      DEBUG_PRINT("End Document\n");
+      DEBUG_PRINT("DOCUMENT END:\n");
       break;
     case YAML_SEQUENCE_START_EVENT:
-      DEBUG_PRINT("Start Sequence: Style: %d\n", event->data.sequence_start.style);
+      DEBUG_PRINT("SEQUENCE START: Style: %d\n", event->data.sequence_start.style);
       break;
     case YAML_SEQUENCE_END_EVENT:
-      DEBUG_PRINT("End Sequence\n");
+      DEBUG_PRINT("SEQUENCE END:\n");
       break;
     case YAML_MAPPING_START_EVENT:
-      DEBUG_PRINT("Start Mapping Style: %d\n", event->data.mapping_start.style);
+      DEBUG_PRINT("MAPPING START: Style: %d\n", event->data.mapping_start.style);
       break;
     case YAML_MAPPING_END_EVENT:
-      DEBUG_PRINT("End Mapping\n");
+      DEBUG_PRINT("MAPPING END:\n");
       break;
     case YAML_ALIAS_EVENT:
-      DEBUG_PRINT("Alias\n");
+      DEBUG_PRINT("ALIAS:\n");
       break;
     case YAML_SCALAR_EVENT:
-      DEBUG_PRINT("Scalar: Style: %d, Value: %s\n",
+      DEBUG_PRINT("SCALAR: Style: %d, Value: %s\n",
         event->data.scalar.style, event->data.scalar.value);
       break;
   }
@@ -269,7 +269,7 @@ static void print_help(char **argv) {
     "Usage: %s [-m] [-p <prefix>] [<filename>] [-v] [-h]\n"
     "\n"
     "Options:\n"
-    "    -m          : handle as a file contains mutiple documents\n"
+    "    -m          : handle as a file contains multiple documents\n"
     "    -p <prefix> : specify a prefix for variables, or \"YAML\" by default\n"
     "    <filename>  : specify a YAML file to parse, or it will wait for stdin\n"
     "    -v          : show the current version and exit\n"
@@ -309,7 +309,7 @@ int main(int argc, char **argv) {
   if (argc > optind) {
     fh = fopen(argv[optind], "r");
     if (fh == NULL) {
-      fprintf(stderr, "Failed to open file: %s\n", argv[optind]);
+      fprintf(stderr, "Failed to open a file: %s\n", argv[optind]);
       return 1;
     }
   } else {
