@@ -126,18 +126,18 @@ static int yaml2bash_parse(yaml_parser_t *parser, char *prefix, int state) {
     }
 
 #ifdef DEBUG
-    printf("--------------------\n");
-    printf("STATE = [");
+    DEBUG_PRINT("--------------------\n");
+    DEBUG_PRINT("STATE = [");
     if (state & STATE_SEQ) {
-      printf("SEQ ");
+      DEBUG_PRINT("SEQ ");
     }
     if (state & STATE_MAP) {
-      printf("MAP ");
+      DEBUG_PRINT("MAP ");
     }
     if (state & STATE_VAL) {
-      printf("VAL ");
+      DEBUG_PRINT("VAL ");
     }
-    printf("], PREFIX = %s, KEY = %s, SEQ = %d\n", prefix, key, sequence);
+    DEBUG_PRINT("], PREFIX = %s, KEY = %s, SEQ = %d\n", prefix, key, sequence);
     print_event(&event);
 #endif
 
