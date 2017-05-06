@@ -3,9 +3,10 @@
 traverse() {
   local prefix=${1//[/_}; prefix=${prefix//]/}
   if declare -p "${prefix}" 2>/dev/null | grep -q '^declare \-A'; then
-    local keys="${prefix}[KEYS]"
-    for key in ${!keys}; do
-      traverse "${prefix}_$key"
+    local k
+    local _keys=($(keys "${prefix}"))
+    for k in "${_keys[@]}"; do
+      traverse "${prefix}_${k}"
     done
   else
     echo "${prefix}=${!prefix}"
@@ -15,9 +16,8 @@ traverse() {
 count() {
   local prefix=${1//[/_}; prefix=${prefix//]/}
   if declare -p "${prefix}" 2>/dev/null | grep -q '^declare \-A'; then
-    local keys="${prefix}[KEYS]"
-    keys=(${!keys})
-    echo ${#keys[@]}
+    local _keys=($(keys "${prefix}"))
+    echo ${#_keys[@]}
   elif [ -n "${!prefix}" ]; then
     echo 1
   else
@@ -25,11 +25,28 @@ count() {
   fi
 }
 
+reverse() {
+  local i
+  for (( i = ${#} ; i > 0 ; i-- )); do
+    echo "${!i}"
+  done
+}
+
 keys() {
   local prefix=${1//[/_}; prefix=${prefix//]/}
   if declare -p "${prefix}" 2>/dev/null | grep -q '^declare \-A'; then
-    local keys="${prefix}[KEYS]"
-    echo ${!keys}
+    local k
+    local _keys="${prefix}[KEYS]"
+    local _uniq_keys=""
+    declare -A _hash_keys
+    _keys=($(reverse ${!_keys}))
+    for k in "${_keys[@]}"; do
+      if [ -z "${_hash_keys[${k}]}" ]; then
+        _uniq_keys="${k} ${_uniq_keys}"
+        _hash_keys[${k}]=1
+      fi
+    done
+    echo ${_uniq_keys}
   fi
 }
 
@@ -43,10 +60,11 @@ value() {
 json() {
   local prefix=${1//[/_}; prefix=${prefix//]/}
   if declare -p "${prefix}" 2>/dev/null | grep -q '^declare \-A'; then
-    local keys="${prefix}[KEYS]"
+    local k
+    local _keys=($(keys "${prefix}"))
     local values="{"
-    for key in ${!keys}; do
-      values="${values} \"$key\":$(json ${prefix}_${key}),"
+    for k in "${_keys[@]}"; do
+      values="${values} \"${k}\":$(json ${prefix}_${k}),"
     done
     values="${values} }"
     echo ${values} | sed -e 's/, }/ }/g'
