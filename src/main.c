@@ -57,11 +57,13 @@ static void print_event(yaml_event_t *event) {
 }
 #endif
 
-#define STATE_SEQ 1
-#define STATE_MAP 1<<1
-#define STATE_VAL 1<<2
+#define Y2B_PREFIX    "Y2B"
 
-#define SEPARATOR '_'
+#define Y2B_STATE_SEQ 1
+#define Y2B_STATE_MAP 1<<1
+#define Y2B_STATE_VAL 1<<2
+
+#define Y2B_SEPARATOR '_'
 
 static int flag_multiple_douments = 0;
 
@@ -145,8 +147,8 @@ static int yaml2bash_parse(yaml_parser_t *parser, char *prefix, int state) {
   char key[1024];
   char *value;
 
-  if (state & STATE_SEQ) {
-    sprintf(key, "%s%c%d", prefix, SEPARATOR, sequence);
+  if (state & Y2B_STATE_SEQ) {
+    sprintf(key, "%s%c%d", prefix, Y2B_SEPARATOR, sequence);
   } else {
     sprintf(key, "%s", prefix);
   }
@@ -159,14 +161,14 @@ static int yaml2bash_parse(yaml_parser_t *parser, char *prefix, int state) {
 
 #ifdef DEBUG
     DEBUG_PRINT("--------------------\n");
-    DEBUG_PRINT("STATE = [");
-    if (state & STATE_SEQ) {
+    DEBUG_PRINT("Y2B_STATE = [");
+    if (state & Y2B_STATE_SEQ) {
       DEBUG_PRINT("SEQ ");
     }
-    if (state & STATE_MAP) {
+    if (state & Y2B_STATE_MAP) {
       DEBUG_PRINT("MAP ");
     }
-    if (state & STATE_VAL) {
+    if (state & Y2B_STATE_VAL) {
       DEBUG_PRINT("VAL ");
     }
     DEBUG_PRINT("], PREFIX = %s, KEY = %s, SEQ = %d\n", prefix, key, sequence);
@@ -185,7 +187,7 @@ static int yaml2bash_parse(yaml_parser_t *parser, char *prefix, int state) {
         break;
       case YAML_DOCUMENT_START_EVENT:
         if (flag_multiple_douments) {
-          sprintf(key, "%s%c%d", prefix, SEPARATOR, sequence);
+          sprintf(key, "%s%c%d", prefix, Y2B_SEPARATOR, sequence);
           printf("declare -A %s; %s[KEYS]+=\" %d\";\n", prefix, prefix, sequence);
           sequence++;
           if (!yaml2bash_parse(parser, key, 0)) {
@@ -198,15 +200,15 @@ static int yaml2bash_parse(yaml_parser_t *parser, char *prefix, int state) {
         finished = 1;
         break;
       case YAML_SEQUENCE_START_EVENT:
-        if (state & STATE_MAP) {
-          state ^= STATE_VAL;
+        if (state & Y2B_STATE_MAP) {
+          state ^= Y2B_STATE_VAL;
         }
-        if (state & STATE_SEQ) {
+        if (state & Y2B_STATE_SEQ) {
           printf("declare -A %s; %s[KEYS]+=\" %d\";\n", prefix, prefix, sequence);
-          sprintf(key, "%s%c%d", prefix, SEPARATOR, sequence);
+          sprintf(key, "%s%c%d", prefix, Y2B_SEPARATOR, sequence);
           sequence++;
         }
-        if (!yaml2bash_parse(parser, key, STATE_SEQ)) {
+        if (!yaml2bash_parse(parser, key, Y2B_STATE_SEQ)) {
           yaml_event_delete(&event);
           return 0;
         }
@@ -215,15 +217,15 @@ static int yaml2bash_parse(yaml_parser_t *parser, char *prefix, int state) {
         finished = 1;
         break;
       case YAML_MAPPING_START_EVENT:
-        if (state & STATE_MAP) {
-          state ^= STATE_VAL;
+        if (state & Y2B_STATE_MAP) {
+          state ^= Y2B_STATE_VAL;
         }
-        if (state & STATE_SEQ) {
+        if (state & Y2B_STATE_SEQ) {
           printf("declare -A %s; %s[KEYS]+=\" %d\";\n", prefix, prefix, sequence);
-          sprintf(key, "%s%c%d", prefix, SEPARATOR, sequence);
+          sprintf(key, "%s%c%d", prefix, Y2B_SEPARATOR, sequence);
           sequence++;
         }
-        if (!yaml2bash_parse(parser, key, STATE_MAP)) {
+        if (!yaml2bash_parse(parser, key, Y2B_STATE_MAP)) {
           yaml_event_delete(&event);
           return 0;
         }
@@ -232,21 +234,21 @@ static int yaml2bash_parse(yaml_parser_t *parser, char *prefix, int state) {
         finished = 1;
         break;
       case YAML_ALIAS_EVENT:
-        if (state & STATE_MAP) {
-          state ^= STATE_VAL;
+        if (state & Y2B_STATE_MAP) {
+          state ^= Y2B_STATE_VAL;
         }
-        if (state & STATE_SEQ) {
+        if (state & Y2B_STATE_SEQ) {
           printf("declare -A %s; %s[KEYS]+=\" %d\";\n", prefix, prefix, sequence);
           sequence++;
         }
         break;
       case YAML_SCALAR_EVENT:
-        if ((state == 0) || (state & STATE_VAL)) {
+        if ((state == 0) || (state & Y2B_STATE_VAL)) {
           yaml2bash_value((char *)event.data.scalar.value, &value);
           printf("%s=\"%s\";\n", key, value);
-          state ^= STATE_VAL;
+          state ^= Y2B_STATE_VAL;
         }
-        else if (state & STATE_SEQ) {
+        else if (state & Y2B_STATE_SEQ) {
           yaml2bash_value((char *)event.data.scalar.value, &value);
           printf("declare -A %s; %s[KEYS]+=\" %d\";\n", prefix, prefix, sequence);
           printf("%s_%d=\"%s\";\n", prefix, sequence, value);
@@ -254,8 +256,8 @@ static int yaml2bash_parse(yaml_parser_t *parser, char *prefix, int state) {
         } else {
           yaml2bash_key((char *)event.data.scalar.value, &value);
           printf("declare -A %s; %s[KEYS]+=\" %s\";\n", prefix, prefix, value);
-          sprintf(key, "%s%c%s", prefix, SEPARATOR, value);
-          state |= STATE_VAL;
+          sprintf(key, "%s%c%s", prefix, Y2B_SEPARATOR, value);
+          state |= Y2B_STATE_VAL;
         }
 
         free(value);
@@ -276,12 +278,12 @@ static void print_help(char **argv) {
     "\n"
     "Options:\n"
     "    -m          : handle as a file contains multiple documents\n"
-    "    -p <prefix> : specify a prefix for variables, or \"YAML\" by default\n"
+    "    -p <prefix> : specify a prefix for variables, or \"%s\" by default\n"
     "    <filename>  : specify a YAML file to parse, or it will wait for stdin\n"
     "    -v          : show the current version and exit\n"
     "    -h          : show this help message and exit\n"
     ,
-    VERSION, argv[0]);
+    Y2B_VERSION, argv[0], Y2B_PREFIX);
 }
 
 int main(int argc, char **argv) {
@@ -289,13 +291,13 @@ int main(int argc, char **argv) {
   char prefix[1024];
   yaml_parser_t parser;
 
-  sprintf(prefix, "YAML");
+  sprintf(prefix, Y2B_PREFIX);
 
   int opt;
   while ((opt = getopt(argc, argv, "vhmp:")) != -1) {
     switch (opt) {
       case 'v':
-        fprintf(stderr, "yaml2bash v%s\n", VERSION);
+        fprintf(stderr, "yaml2bash v%s\n", Y2B_VERSION);
         return 0;
       case 'h':
         print_help(argv);

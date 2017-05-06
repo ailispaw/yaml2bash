@@ -1,23 +1,23 @@
 #!/usr/bin/env bash
 
-traverse() {
+y2b_traverse() {
   local prefix=${1//[/_}; prefix=${prefix//]/}
   if declare -p "${prefix}" 2>/dev/null | grep -q '^declare \-A'; then
     local k
-    local _keys=($(keys "${prefix}"))
-    for k in "${_keys[@]}"; do
-      traverse "${prefix}_${k}"
+    local keys=($(y2b_keys "${prefix}"))
+    for k in "${keys[@]}"; do
+      y2b_traverse "${prefix}_${k}"
     done
   else
     echo "${prefix}=${!prefix}"
   fi
 }
 
-count() {
+y2b_count() {
   local prefix=${1//[/_}; prefix=${prefix//]/}
   if declare -p "${prefix}" 2>/dev/null | grep -q '^declare \-A'; then
-    local _keys=($(keys "${prefix}"))
-    echo ${#_keys[@]}
+    local keys=($(y2b_keys "${prefix}"))
+    echo ${#keys[@]}
   elif [ -n "${!prefix}" ]; then
     echo 1
   else
@@ -25,46 +25,46 @@ count() {
   fi
 }
 
-reverse() {
+y2b_reverse() {
   local i
   for (( i = ${#} ; i > 0 ; i-- )); do
     echo "${!i}"
   done
 }
 
-keys() {
+y2b_keys() {
   local prefix=${1//[/_}; prefix=${prefix//]/}
   if declare -p "${prefix}" 2>/dev/null | grep -q '^declare \-A'; then
     local k
-    local _keys="${prefix}[KEYS]"
-    local _uniq_keys=""
-    declare -A _hash_keys
-    _keys=($(reverse ${!_keys}))
-    for k in "${_keys[@]}"; do
-      if [ -z "${_hash_keys[${k}]}" ]; then
-        _uniq_keys="${k} ${_uniq_keys}"
-        _hash_keys[${k}]=1
+    local keys="${prefix}[KEYS]"
+    local uniq_keys=""
+    declare -A hash_keys
+    keys=($(y2b_reverse ${!keys}))
+    for k in "${keys[@]}"; do
+      if [ -z "${hash_keys[${k}]}" ]; then
+        uniq_keys="${k} ${uniq_keys}"
+        hash_keys[${k}]=1
       fi
     done
-    echo ${_uniq_keys}
+    echo ${uniq_keys}
   fi
 }
 
-value() {
+y2b_value() {
   local prefix=${1//[/_}; prefix=${prefix//]/}
   if ! declare -p "${prefix}" 2>/dev/null | grep -q '^declare \-A'; then
     echo "${!prefix}"
   fi
 }
 
-json() {
+y2b_json() {
   local prefix=${1//[/_}; prefix=${prefix//]/}
   if declare -p "${prefix}" 2>/dev/null | grep -q '^declare \-A'; then
     local k
-    local _keys=($(keys "${prefix}"))
+    local keys=($(y2b_keys "${prefix}"))
     local values="{"
-    for k in "${_keys[@]}"; do
-      values="${values} \"${k}\":$(json ${prefix}_${k}),"
+    for k in "${keys[@]}"; do
+      values="${values} \"${k}\":$(y2b_json ${prefix}_${k}),"
     done
     values="${values} }"
     echo ${values} | sed -e 's/, }/ }/g'

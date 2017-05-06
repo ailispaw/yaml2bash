@@ -1,5 +1,5 @@
 PROGRAM := yaml2bash
-VERSION := $(shell sed -ne "s/^\#define VERSION \"\(.*\)\"/\1/p" src/version.h)
+VERSION := $(shell sed -ne "s/^\#define Y2B_VERSION \"\(.*\)\"/\1/p" src/version.h)
 ARCHIVE := $(PROGRAM)-$(VERSION)-Linux-x86_64.tar.gz
 
 UNAME_S := $(shell uname -s)

@@ -11,7 +11,7 @@ Usage: yaml2bash [-m] [-p <prefix>] [<filename>] [-v] [-h]
 
 Options:
     -m          : handle as a file contains multiple documents
-    -p <prefix> : specify a prefix for variables, or "YAML" by default
+    -p <prefix> : specify a prefix for variables, or "Y2B" by default
     <filename>  : specify a YAML file to parse, or it will wait for stdin
     -v          : show the current version and exit
     -h          : show this help message and exit
@@ -32,11 +32,11 @@ In a script;
 set -e
 
 eval $(yaml2bash ./test/test.yaml)
-declare -p YAML >/dev/null
+declare -p Y2B >/dev/null
 
 # To refer an individual variable
-echo $YAML_hostname
-echo $YAML_users_1_name
+echo $Y2B_hostname
+echo $Y2B_users_1_name
 ```
 
 ### yaml2bash.bash library
@@ -50,15 +50,15 @@ set -e
 source ./lib/yaml2bash.bash
 
 eval $(yaml2bash -m ./test/test.yaml)
-declare -p YAML >/dev/null
+declare -p Y2B >/dev/null
 
-# To traverse YAML structure
-traverse YAML
+# To traverse Y2B structure
+traverse Y2B
 
 # To count chidren of an individual variable
-count YAML
-count YAML_0
-count YAML_0_users
+count Y2B
+count Y2B_0
+count Y2B_0_users
 ```
 
 ## Docker
