@@ -62,12 +62,22 @@ y2b_json() {
   if declare -p "${prefix}" 2>/dev/null | grep -q '^declare \-A'; then
     local k
     local keys=($(y2b_keys "${prefix}"))
-    local values="{"
-    for k in "${keys[@]}"; do
-      values="${values} \"${k}\":$(y2b_json ${prefix}_${k}),"
-    done
-    values="${values} }"
-    echo ${values} | sed -e 's/, }/ }/g'
+    local index="${prefix}[INDEX]"
+    if [ -n "${!index}" ]; then
+      local values="["
+      for k in "${keys[@]}"; do
+        values="${values} $(y2b_json ${prefix}_${k}),"
+      done
+      values="${values} ]"
+      echo ${values} | sed -e 's/, ]/ ]/g'
+    else
+      local values="{"
+      for k in "${keys[@]}"; do
+        values="${values} \"${k}\":$(y2b_json ${prefix}_${k}),"
+      done
+      values="${values} }"
+      echo ${values} | sed -e 's/, }/ }/g'
+    fi
   else
     echo "\"$(echo ${!prefix} | sed -e 's/"/\\\"/g' -e 's/\\x/\\\\x/g')\""
   fi

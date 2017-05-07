@@ -189,6 +189,7 @@ static int yaml2bash_parse(yaml_parser_t *parser, char *prefix, int state) {
         if (flag_multiple_douments) {
           sprintf(key, "%s%c%d", prefix, Y2B_SEPARATOR, sequence);
           printf("declare -A %s; %s[KEYS]+=\" %d\";\n", prefix, prefix, sequence);
+          printf("declare -A %s; %s[INDEX]+=\" %d\";\n", prefix, prefix, sequence);
           sequence++;
           if (!yaml2bash_parse(parser, key, 0)) {
             yaml_event_delete(&event);
@@ -205,6 +206,7 @@ static int yaml2bash_parse(yaml_parser_t *parser, char *prefix, int state) {
         }
         if (state & Y2B_STATE_SEQ) {
           printf("declare -A %s; %s[KEYS]+=\" %d\";\n", prefix, prefix, sequence);
+          printf("declare -A %s; %s[INDEX]+=\" %d\";\n", prefix, prefix, sequence);
           sprintf(key, "%s%c%d", prefix, Y2B_SEPARATOR, sequence);
           sequence++;
         }
@@ -222,6 +224,7 @@ static int yaml2bash_parse(yaml_parser_t *parser, char *prefix, int state) {
         }
         if (state & Y2B_STATE_SEQ) {
           printf("declare -A %s; %s[KEYS]+=\" %d\";\n", prefix, prefix, sequence);
+          printf("declare -A %s; %s[INDEX]+=\" %d\";\n", prefix, prefix, sequence);
           sprintf(key, "%s%c%d", prefix, Y2B_SEPARATOR, sequence);
           sequence++;
         }
@@ -239,6 +242,7 @@ static int yaml2bash_parse(yaml_parser_t *parser, char *prefix, int state) {
         }
         if (state & Y2B_STATE_SEQ) {
           printf("declare -A %s; %s[KEYS]+=\" %d\";\n", prefix, prefix, sequence);
+          printf("declare -A %s; %s[INDEX]+=\" %d\";\n", prefix, prefix, sequence);
           sequence++;
         }
         break;
@@ -251,6 +255,7 @@ static int yaml2bash_parse(yaml_parser_t *parser, char *prefix, int state) {
         else if (state & Y2B_STATE_SEQ) {
           yaml2bash_value((char *)event.data.scalar.value, &value);
           printf("declare -A %s; %s[KEYS]+=\" %d\";\n", prefix, prefix, sequence);
+          printf("declare -A %s; %s[INDEX]+=\" %d\";\n", prefix, prefix, sequence);
           printf("%s_%d=\"%s\";\n", prefix, sequence, value);
           sequence++;
         } else {
