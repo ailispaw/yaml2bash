@@ -20,6 +20,7 @@ echo "--------------------------------------------------------------------------
 echo "Y2B_hostname=${Y2B_hostname}"
 echo "Y2B_users_0_name=${Y2B_users_0_name}"
 echo "Y2B_users_0_gecos=${Y2B_users_0_gecos}"
+echo "Y2B_users_0_primary_group=${Y2B_users_0_primary_group}"
 echo "Y2B_users_0_system=${Y2B_users_0_system}"
 echo "Y2B_users_1_name=${Y2B_users_1_name}"
 echo "Y2B_users_2_name=${Y2B_users_2_name}"
@@ -72,6 +73,8 @@ echo "--------------------------------------------------------------------------
 
 echo "Y2B_users_0_name=${Y2B_users_0_name}"
 echo "y2b_value(Y2B[users][0][name])=$(y2b_value Y2B[users][0][name])"
+echo "Y2B_users_0_primary_group=${Y2B_users_0_primary_group}"
+echo "y2b_value(Y2B_users[0][primary-group])=$(y2b_value Y2B_users[0][primary-group])"
 echo "Y2B_users_2_tests_literal=${Y2B_users_2_tests_literal}"
 echo "y2b_value(Y2B[users][2][tests][literal])=$(y2b_value Y2B[users][2][tests][literal])"
 

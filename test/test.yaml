@@ -5,6 +5,7 @@ hostname: "localhost"
 users:
   - name: foo
     gecos: Foo
+    primary-group: foobar
     system: true
   - name: bar
   - name: test2
