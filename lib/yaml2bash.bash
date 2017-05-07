@@ -68,15 +68,13 @@ y2b_json() {
       for k in "${keys[@]}"; do
         values="${values} $(y2b_json ${prefix}_${k}),"
       done
-      values="${values} ]"
-      echo ${values} | sed -e 's/, ]/ ]/g'
+      echo "${values::-1} ]"
     else
       local values="{"
       for k in "${keys[@]}"; do
         values="${values} \"${k}\":$(y2b_json ${prefix}_${k}),"
       done
-      values="${values} }"
-      echo ${values} | sed -e 's/, }/ }/g'
+      echo "${values::-1} }"
     fi
   else
     echo "\"$(echo ${!prefix} | sed -e 's/"/\\\"/g' -e 's/\\x/\\\\x/g')\""
