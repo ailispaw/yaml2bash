@@ -1,8 +1,0 @@
-#cloud-config
-service:
-  - start: dbus0
-  - start: [ foo1, bar2 ]
-  - stop:
-  - foo3
-  - bar4
-  - [ foo5, bar6 ]

@@ -1,9 +1,0 @@
-#cloud-config
-runcmd:
-  - [ ls, -l, / ]
-  - [ sh, -xc, "echo $(date) ': hello world!'" ]
-  - [ sh, -xc, "echo `date` ': hello world!'" ]
-  - [ sh, -xc, "echo 'hello world!' !#:*" ]
-  - [ sh, -c, echo "=========hello world'=========" ]
-  - ls -l /root
-  - [ wget, "http://slashdot.org", -O, /tmp/index.html ]
