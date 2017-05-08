@@ -71,9 +71,7 @@ static void yaml2bash_key(char *src, char **result) {
   int i, j;
   char *buf = (char *)malloc(sizeof(char) * strlen(src) + 1);
   for (i = 0, j = 0; i < strlen(src); i++) {
-    if (src[i] == ' ') {
-      buf[j++] = '_';
-    } else if (src[i] == '-') {
+    if ((src[i] == ' ') || (src[i] == '-') || (src[i] == '/')) {
       buf[j++] = '_';
     } else {
       buf[j++] = src[i];
