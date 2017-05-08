@@ -1,6 +1,7 @@
 y2b_traverse() {
   local prefix=${1//[/_}; prefix=${prefix//]/}; prefix=${prefix//-/_};
-  if declare -p "${prefix}" 2>/dev/null | grep -q '^declare \-A'; then
+  local prefix_type=$(declare -p "${prefix}" 2>/dev/null);
+  if [ "${prefix_type:8:2}" == "-A" ]; then
     local k;
     local keys=($(y2b_keys "${prefix}"));
     for k in "${keys[@]}"; do
@@ -13,7 +14,8 @@ y2b_traverse() {
 
 y2b_count() {
   local prefix=${1//[/_}; prefix=${prefix//]/}; prefix=${prefix//-/_};
-  if declare -p "${prefix}" 2>/dev/null | grep -q '^declare \-A'; then
+  local prefix_type=$(declare -p "${prefix}" 2>/dev/null);
+  if [ "${prefix_type:8:2}" == "-A" ]; then
     local keys=($(y2b_keys "${prefix}"));
     echo ${#keys[@]};
   elif [ -n "${!prefix}" ]; then
@@ -32,7 +34,8 @@ y2b_reverse() {
 
 y2b_keys() {
   local prefix=${1//[/_}; prefix=${prefix//]/}; prefix=${prefix//-/_};
-  if declare -p "${prefix}" 2>/dev/null | grep -q '^declare \-A'; then
+  local prefix_type=$(declare -p "${prefix}" 2>/dev/null);
+  if [ "${prefix_type:8:2}" == "-A" ]; then
     local k;
     local keys="${prefix}[KEYS]";
     local uniq_keys="";
@@ -50,14 +53,16 @@ y2b_keys() {
 
 y2b_value() {
   local prefix=${1//[/_}; prefix=${prefix//]/}; prefix=${prefix//-/_};
-  if ! declare -p "${prefix}" 2>/dev/null | grep -q '^declare \-A'; then
+  local prefix_type=$(declare -p "${prefix}" 2>/dev/null);
+  if [ ! "${prefix_type:8:2}" == "-A" ]; then
     echo "${!prefix}";
   fi;
 };
 
 y2b_json() {
   local prefix=${1//[/_}; prefix=${prefix//]/}; prefix=${prefix//-/_};
-  if declare -p "${prefix}" 2>/dev/null | grep -q '^declare \-A'; then
+  local prefix_type=$(declare -p "${prefix}" 2>/dev/null);
+  if [ "${prefix_type:8:2}" == "-A" ]; then
     local k;
     local keys=($(y2b_keys "${prefix}"));
     local index="${prefix}[INDEX]";
