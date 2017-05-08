@@ -80,6 +80,7 @@ y2b_json() {
       echo "${values::-1} }";
     fi;
   else
-    echo "\"$(echo ${!prefix} | sed -e 's/"/\\\"/g' -e 's/\\x/\\\\x/g')\"";
+    local value=${!prefix}; value=${value//\"/\\\"}; value=${value//\\x/\\\\x}; 
+    echo "\"${value}\"";
   fi;
 };
