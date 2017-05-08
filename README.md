@@ -1,6 +1,6 @@
 # yaml2bash
 
-Converts YAML into Bash
+Converts YAML into Bash Script
 
 ## Usage
 
