@@ -3,8 +3,6 @@ set -e
 
 ../src/yaml2bash test.yaml
 
-source ../lib/yaml2bash.bash
-
 eval $(../src/yaml2bash test.yaml)
 declare -p Y2B >/dev/null
 

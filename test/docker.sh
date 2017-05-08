@@ -1,8 +1,6 @@
 #!/usr/bin/env bash
 set -e
 
-source ../lib/yaml2bash.bash
-
 eval $(docker run -i --rm ailispaw/yaml2bash -m < test.yaml)
 declare -p Y2B >/dev/null
 

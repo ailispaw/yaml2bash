@@ -1,5 +1,6 @@
 .vagrant/
 
 yaml2bash
+yaml2bash.h
 *.o
 *.tar.gz

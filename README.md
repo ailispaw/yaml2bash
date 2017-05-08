@@ -1,10 +1,8 @@
 # yaml2bash
 
-Converts YAML to Bash variables
+Converts YAML into Bash
 
 ## Usage
-
-### yaml2bash binary
 
 ```
 Usage: yaml2bash [-m] [-p <prefix>] [<filename>] [-v] [-h]
@@ -17,15 +15,7 @@ Options:
     -h          : show this help message and exit
 ```
 
-At a console;
-
-```bash
-$ yaml2bash ./test/test.yaml
-$ cat ./test/test.yaml | yaml2bash
-$ yaml2bash -p PREFIX < ./test/test.yaml
-```
-
-In a script;
+In a bash script;
 
 ```bash
 #!/usr/bin/env bash
@@ -36,29 +26,24 @@ declare -p Y2B >/dev/null
 
 # To refer an individual variable
 echo $Y2B_hostname
+y2b_value Y2B[hostname]
 echo $Y2B_users_1_name
-```
+y2b_value Y2B[users][1][name]
 
-### yaml2bash.bash library
-
-In a script;
-
-```bash
-#!/usr/bin/env bash
-set -e
-
-source ./lib/yaml2bash.bash
-
-eval $(yaml2bash -m ./test/test.yaml)
-declare -p Y2B >/dev/null
-
-# To traverse Y2B structure
-traverse Y2B
+# To traverse YAML structure
+y2b_traverse Y2B
 
 # To count chidren of an individual variable
-count Y2B
-count Y2B_0
-count Y2B_0_users
+y2b_count Y2B
+y2b_count Y2B[users]
+
+# To retrieve indexes of an array or keys of a mapping
+y2b_keys Y2B
+y2b_keys Y2B[users]
+
+# In addition,
+# To convert YAML into JSON
+y2b_json Y2B
 ```
 
 ## Docker

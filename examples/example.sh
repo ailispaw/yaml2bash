@@ -10,8 +10,6 @@ fi
 
 ../src/yaml2bash "${FILE}"
 
-source ../lib/yaml2bash.bash
-
 eval $(../src/yaml2bash "${FILE}")
 declare -p Y2B >/dev/null
 

@@ -22,8 +22,8 @@ clean:
 
 release: $(ARCHIVE)
 
-$(ARCHIVE): $(PROGRAM) lib/$(PROGRAM).bash
-	tar zcvf $(ARCHIVE) $(PROGRAM) lib/$(PROGRAM).bash
+$(ARCHIVE): $(PROGRAM)
+	tar zcvf $(ARCHIVE) $(PROGRAM)
 
 $(PROGRAM):
 	docker build -t $(PROGRAM):static -f Dockerfile.static .

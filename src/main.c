@@ -3,6 +3,7 @@
 #include <yaml.h>
 
 #include "version.h"
+#include "yaml2bash.h"
 
 #ifdef DEBUG
   #define DEBUG_PRINT(...) do { fprintf(stderr, __VA_ARGS__); } while (0)
@@ -336,6 +337,8 @@ int main(int argc, char **argv) {
     fclose(fh);
     return 1;
   }
+
+  printf("%s", yaml2bash_bash);
 
   yaml_parser_delete(&parser);
   fclose(fh);

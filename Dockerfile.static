@@ -1,6 +1,6 @@
 FROM alpine:3.4
 
-RUN apk --no-cache --update add build-base yaml-dev
+RUN apk --no-cache --update add build-base yaml-dev vim
 
 WORKDIR /work
 
