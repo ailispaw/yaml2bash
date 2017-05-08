@@ -1,1 +1,1 @@
-#define Y2B_VERSION "0.8.0"
+#define Y2B_VERSION "0.9.0"
