@@ -4,7 +4,6 @@ set -e
 ../src/yaml2bash test.yaml
 
 eval $(../src/yaml2bash test.yaml)
-declare -p Y2B >/dev/null
 
 echo "--------------------------------------------------------------------------------"
 echo "Traversing"

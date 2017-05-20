@@ -22,7 +22,6 @@ In a bash script;
 set -e
 
 eval $(yaml2bash ./test/test.yaml)
-declare -p Y2B >/dev/null
 
 # To refer an individual variable
 echo $Y2B_hostname

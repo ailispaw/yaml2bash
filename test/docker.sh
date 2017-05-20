@@ -2,7 +2,6 @@
 set -e
 
 eval $(docker run -i --rm ailispaw/yaml2bash -m < test.yaml)
-declare -p Y2B >/dev/null
 
 # To traverse YAML structure
 y2b_traverse Y2B

@@ -11,7 +11,6 @@ fi
 ../src/yaml2bash "${FILE}"
 
 eval $(../src/yaml2bash "${FILE}")
-declare -p Y2B >/dev/null
 
 echo "--------------------------------------------------------------------------------"
 echo "Traversing"

@@ -321,6 +321,7 @@ int main(int argc, char **argv) {
   if (argc > optind) {
     fh = fopen(argv[optind], "r");
     if (fh == NULL) {
+      printf("false;\n");
       fprintf(stderr, "Failed to open a file: %s\n", argv[optind]);
       return 1;
     }
@@ -333,7 +334,7 @@ int main(int argc, char **argv) {
   yaml_parser_set_input_file(&parser, fh);
 
   if (!yaml2bash_parse(&parser, prefix, 0)) {
-    printf("unset %s\n;", prefix);
+    printf("false;\n");
     yaml_parser_delete(&parser);
     fclose(fh);
     return 1;
