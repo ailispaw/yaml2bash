@@ -333,6 +333,7 @@ int main(int argc, char **argv) {
   yaml_parser_set_input_file(&parser, fh);
 
   if (!yaml2bash_parse(&parser, prefix, 0)) {
+    printf("unset %s\n;", prefix);
     yaml_parser_delete(&parser);
     fclose(fh);
     return 1;
